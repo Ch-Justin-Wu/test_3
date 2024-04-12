@@ -56,10 +56,10 @@ void loop(void)
     key_process();
     disp_process();
 
-    if (uwTick - time_500ms >= 500)
+    if (uwTick - time_500ms >= 500) // 如果当前的系统滴答计数和上一次清除屏幕的时间之差大于或等于500
     {
-        time_500ms = uwTick;
-        LCD_Clear(Black);
+        time_500ms = uwTick; // 更新上一次清除屏幕的时间为当前的系统滴答计数
+        LCD_Clear(Black); // 清除LCD屏幕
     }
 }
 

@@ -100,17 +100,24 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
 void HAL_TIM_IC_CaptureCallback(TIM_HandleTypeDef *htim)
 {
-    if (htim->Instance == TIM2)
+    if (htim->Instance == TIM2) // 如果这个中断是由定时器2触发的
     {
-        // 直接输入通道
+        // 如果这个中断是由通道1触发的
         if (htim->Channel == HAL_TIM_ACTIVE_CHANNEL_1)
         {
+            // 读取通道1的捕获值
             pwm_capture[0].ccr1_val = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_1);
+            // 读取通道2的捕获值
             pwm_capture[0].high_val = HAL_TIM_ReadCapturedValue(htim, TIM_CHANNEL_2);
+            // 将定时器的计数器重置为0
             __HAL_TIM_SetCounter(htim, 0);
+            // 计算PWM信号的频率，假设定时器的时钟频率为80MHz，预分频器的分频系数为80
             pwm_capture[0].frq = 80000000 / 80 / (pwm_capture[0].ccr1_val + 1);
+            // 计算PWM信号的占空比
             pwm_capture[0].duty = (float)(pwm_capture[0].high_val + 1) / (pwm_capture[0].ccr1_val + 1);
+            // 重新启动通道1的输入捕获中断
             HAL_TIM_IC_Start_IT(htim, TIM_CHANNEL_1);
+            // 重新启动通道2的输入捕获中断
             HAL_TIM_IC_Start_IT(htim, TIM_CHANNEL_2);
         }
     }

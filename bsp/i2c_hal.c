@@ -315,24 +315,30 @@ void eeprom_write(uint8_t addr, uint8_t data)
 //MCP4017数字电位器
 void mcp4017_write(uint8_t data)
 {
-  I2CStart();
-  I2CSendByte(0x5e);//写入指令
-  I2CWaitAck();
-  I2CSendByte(data);
-  I2CWaitAck();
-  I2CStop();
+  I2CStart(); // 发送I2C开始信号
+
+  I2CSendByte(0x5e); // 发送设备地址和写操作位
+  I2CWaitAck(); // 等待设备的应答信号
+
+  I2CSendByte(data); // 发送要写入的数据
+  I2CWaitAck(); // 等待设备的应答信号
+
+  I2CStop(); // 发送I2C停止信号
 }
 
 uint8_t mcp4017_read()
 {
-  uint8_t data;
+  uint8_t data; // 定义一个变量用于存储读取到的数据
 
-  I2CStart();
-  I2CSendByte(0x5f);//读取指令
-  I2CWaitAck();
-  
-  data = I2CReceiveByte();
-  I2CSendNotAck();
-  I2CStop();
-  return data;
+  I2CStart(); // 发送I2C开始信号
+
+  I2CSendByte(0x5f); // 发送设备地址和读操作位
+  I2CWaitAck(); // 等待设备的应答信号
+
+  data = I2CReceiveByte(); // 读取数据
+  I2CSendNotAck(); // 发送非应答信号
+
+  I2CStop(); // 发送I2C停止信号
+
+  return data; // 返回读取到的数据
 }

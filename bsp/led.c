@@ -14,11 +14,12 @@ void led_disp(uint8_t ds_led)
 // 单独控制一位led
 void led_chg(uint8_t led_sta, uint8_t num, uint8_t status) // num:1-8
 {
-    uint8_t pos = 0x01 << (num - 1);
+    uint8_t pos = 0x01 << (num - 1); // 计算出要改变的LED在led_sta中的位置
 
+    // 将led_sta中对应位置的LED状态改为status
     led_sta = (led_sta & (~pos) | (pos * status));
 
-    led_disp(led_sta);
+    led_disp(led_sta); // 显示新的LED状态
 }
 
 void my_led_disp(uint8_t addr)
